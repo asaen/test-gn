@@ -46,7 +46,7 @@ public class SampleDataConfiguration {
     /**
      * Amount of tags.
      */
-    private static final int TAGS_AMOUNT = 1;
+    private static final int TAGS_AMOUNT = 5;
 
     /**
      * Amount of images.
@@ -72,7 +72,7 @@ public class SampleDataConfiguration {
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public final void fill() {
         this.createTags();
-        for (int idx = 1; idx <= IMAGES_AMOUNT; ++idx) {
+        for (int idx = 0; idx < IMAGES_AMOUNT; ++idx) {
             this.images.saveAndFlush(
                 new Image(
                     null,
@@ -89,7 +89,7 @@ public class SampleDataConfiguration {
      */
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     private void createTags() {
-        for (int idx = 1; idx <= TAGS_AMOUNT; ++idx) {
+        for (int idx = 0; idx < TAGS_AMOUNT; ++idx) {
             this.tags.saveAndFlush(
                 new Tag(null, String.format("tag #%s", idx))
             );

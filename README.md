@@ -1,7 +1,8 @@
 # Image Manager
 
 ## How to build and execute
-Execute `mvn spring-boot:run` to start the application. Access its UI client with `http://localhost:8090`.
+Execute `mvn spring-boot:run` to start the application. 
+Access its REST endpoint at `http://localhost:8090/rest/image`.
 
 ## Requirements
 We have a REST API that manages images. An image has the following attributes:

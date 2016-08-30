@@ -53,28 +53,98 @@ public class ImageDaoImplTest {
     private transient ImageDao dao;
 
     /**
+     * Tag dao.
+     */
+    @Autowired
+    private transient TagDao tags;
+
+    /**
      * Can find single image.
      */
     @Test
     public final void findsSingleImage() {
-        final String tag = "tag-1";
+        final Tag first = this.tags.saveAndFlush(new Tag(null, "tag-1"));
+        final Tag second = this.tags.saveAndFlush(new Tag(null, "tag--1"));
         this.dao.saveAndFlush(
             new Image(
                 null,
                 new Date(),
-                "title",
-                new HashSet<>(Arrays.asList(new Tag(null, tag)))
+                "title 1",
+                new HashSet<>(Arrays.asList(first))
             )
         );
         this.dao.saveAndFlush(
             new Image(
                 null,
                 new Date(),
-                "new title",
-                new HashSet<>(Arrays.asList(new Tag(null, "tag--1")))
+                "new title 1",
+                new HashSet<>(Arrays.asList(second))
             )
         );
-        Assert.assertEquals(1, this.dao.findByTags(Arrays.asList(tag)).size());
+        Assert.assertEquals(
+            1, this.dao.findByTags(Arrays.asList(first.getName())).size()
+        );
+    }
+
+    /**
+     * Can find multiple images with the same tag.
+     */
+    @Test
+    public final void findsMultipleImages() {
+        final Tag first = this.tags.saveAndFlush(new Tag(null, "tag-2"));
+        final Tag second = this.tags.saveAndFlush(new Tag(null, "tag--2"));
+        this.dao.saveAndFlush(
+            new Image(
+                null,
+                new Date(),
+                "title 2",
+                new HashSet<>(Arrays.asList(first))
+            )
+        );
+        this.dao.saveAndFlush(
+            new Image(
+                null,
+                new Date(),
+                "new title 2",
+                new HashSet<>(
+                    Arrays.asList(first, second)
+                )
+            )
+        );
+        Assert.assertEquals(
+            2, this.dao.findByTags(Arrays.asList(first.getName())).size()
+        );
+    }
+
+    /**
+     * Can find multiple images with different tags.
+     */
+    @Test
+    public final void findMultipleImagesDifferentTags() {
+        final Tag first = this.tags.saveAndFlush(new Tag(null, "tag-3"));
+        final Tag second = this.tags.saveAndFlush(new Tag(null, "tag--3"));
+        this.dao.saveAndFlush(
+            new Image(
+                null,
+                new Date(),
+                "title 3",
+                new HashSet<>(Arrays.asList(first))
+            )
+        );
+        this.dao.saveAndFlush(
+            new Image(
+                null,
+                new Date(),
+                "new title 3",
+                new HashSet<>(Arrays.asList(second))
+            )
+        );
+        Assert.assertEquals(
+            2,
+            this.dao.findByTags(
+                Arrays.asList(first.getName(), second.getName())
+            ).size()
+        );
     }
 
 }
