@@ -28,9 +28,9 @@ import me.geenee.dao.ImageDao;
 import me.geenee.entities.Image;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -59,22 +59,21 @@ public class ImageController {
     private transient ImageDao dao;
 
     /**
-     * All images.
-     * @return Images.
-     */
-    @RequestMapping(method = RequestMethod.GET)
-    public final Iterable<Image> list() {
-        return this.dao.findAll();
-    }
-
-    /**
      * Finds images by tags.
      * @param tags Tags.
-     * @return Found images.
+     * @return Found images, if no tags are given returns all images.
      */
-    @RequestMapping(method = RequestMethod.POST)
-    public final Iterable<Image> byTags(@RequestBody final List<String> tags) {
-        return this.dao.findByTags(tags);
+    @RequestMapping(method = RequestMethod.GET)
+    public final Iterable<Image> find(
+        @RequestParam(name = "tag", required = false) final List<String> tags
+    ) {
+        List<Image> result;
+        if (tags == null || tags.isEmpty()) {
+            result = this.dao.findAll();
+        } else {
+            result = this.dao.findByTags(tags);
+        }
+        return result;
     }
 
 }

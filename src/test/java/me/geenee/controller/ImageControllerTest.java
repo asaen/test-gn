@@ -112,13 +112,9 @@ public class ImageControllerTest extends AbstractRestTest {
         this.getMvc()
             .perform(
                 MockMvcRequestBuilders
-                    .post(ImageController.PATH)
+                    .get(ImageController.PATH)
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
-                    .content(
-                        this.json(
-                            Arrays.asList(first.getName(), second.getName())
-                        )
-                    )
+                    .param("tag", first.getName(), second.getName())
             )
             .andDo(MockMvcResultHandlers.print())
             .andExpect(MockMvcResultMatchers.status().isOk())
